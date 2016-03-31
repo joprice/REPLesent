@@ -19,10 +19,6 @@ version := "1.1"
 
 scalaVersion := "2.11.7"
 
-scalaSource in Test := baseDirectory.value / "test"
-
-resourceDirectory in Test := (scalaSource in Test).value / "resources"
-
 scalacOptions ++= Seq(
     "-deprecation"            // Emit warning and location for usages of deprecated APIs
   , "-encoding", "UTF-8"      // Specify character encoding used by source files
@@ -44,37 +40,9 @@ scalacOptions ++= Seq(
   , "-Ywarn-value-discard"    // Warn when non-Unit expression results are unused
 )
 
-/*
-scalac -language:help
+scalacOptions in (Compile, console) := Seq.empty
 
-dynamics             Allow direct or indirect subclasses of scala.Dynamic
-existentials         Existential types (besides wildcard types) can be written and inferred
-experimental.macros  Allow macro defintion (besides implementation and application)
-higherKinds          Allow higher-kinded types
-implicitConversions  Allow definition of implicit functions called views
-postfixOps           Allow postfix operator notation, such as `1 to 10 toList'
-reflectiveCalls      Allow reflective access to members of structural types
-*/
-
-/*
-scalac -Xlint:help
-
-adapted-args               Warn if an argument list is modified to match the receiver
-by-name-right-associative  By-name parameter of right associative operator
-delayedinit-select         Selecting member of DelayedInit
-doc-detached               A ScalaDoc comment appears to be detached from its element
-inaccessible               Warn about inaccessible types in method signatures
-infer-any                  Warn when a type argument is inferred to be `Any`
-missing-interpolator       A string literal appears to be missing an interpolator id
-nullary-override           Warn when non-nullary `def f()' overrides nullary `def f'
-nullary-unit               Warn when nullary methods return Unit
-option-implicit            Option.apply used implicit view
-package-object-classes     Class or object defined in package object
-poly-implicit-overload     Parameterized overloaded implicit methods are not visible as view bounds
-private-shadow             A private field (or class parameter) shadows a superclass field
-type-parameter-shadow      A local type parameter shadows a type already in scope
-unsound-match              Pattern match may not be typesafe
-*/
+scalacOptions in (Test, console) := (scalacOptions in (Compile, console)).value
 
 libraryDependencies ++= Seq(
     "org.scala-lang"  % "scala-compiler" % "2.11.7" % Compile

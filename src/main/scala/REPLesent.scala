@@ -73,7 +73,7 @@ case class REPLesent(
     }
   }
 
-  private val config = Config(width = width, height = height)
+  private def config = Config(width = width, height = height)
 
   private case class Line(content: String, length: Int, private val style: Line.Style) {
     override def toString: String = content
@@ -85,12 +85,10 @@ case class REPLesent(
     import scala.io.AnsiColor._
 
     protected sealed trait Style {
-      import config.whiteSpace
-
       protected def horizontalSpace = config.horizontalSpace
 
       protected def fill(line: Line, left: Int, right: Int): String = {
-        whiteSpace * left + line + whiteSpace * right
+        config.whiteSpace * left + line + config.whiteSpace * right
       }
 
       def apply(line: Line, margin: Int): String
@@ -433,7 +431,6 @@ case class REPLesent(
     , codeAcc: IndexedSeq[String] = IndexedSeq.empty
     , parser: Parser = LineParser
     ) {
-      import config.newline
 
       def switchParser: Acc = copy(parser = parser.switch)
 
@@ -444,7 +441,7 @@ case class REPLesent(
 
       def pushBuild: Acc = copy(
         builds = builds :+ content.size
-      , code = code :+ codeAcc.mkString(newline)
+      , code = code :+ codeAcc.mkString(config.newline)
       , codeAcc = IndexedSeq.empty
       )
 
@@ -477,7 +474,8 @@ case class REPLesent(
   }
 
   private def render(build: Build): String = {
-    import config._
+    val c = config
+    import c._
 
     val topPadding = (verticalSpace - build.size) / 2
     val bottomPadding = verticalSpace - topPadding - build.content.size
